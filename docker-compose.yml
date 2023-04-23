@@ -1,0 +1,39 @@
+version: '3.7'
+ 
+services:
+  shrug:
+    container_name: shrug
+    hostname: shrug
+    build: ./
+    restart: always
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    volumes:
+      - ./server/files:/app/files
+    networks:
+      - shurg-net
+
+  shrug_postgres:
+    container_name: shrug_postgres
+    image: postgres:12.1-alpine
+    restart: always
+    volumes:
+      - shrug-postgres2:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: shrug
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    networks:
+      - shurg-net
+
+volumes:
+  shrug-postgres2:
+    name: shrug-postgres-vol
+    driver: local 
+  
+networks:
+  shurg-net:
+    name: shrug-net
+    driver: bridge
